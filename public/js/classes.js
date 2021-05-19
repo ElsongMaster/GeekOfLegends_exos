@@ -30,7 +30,7 @@ class Boss extends Personnage {
     this.repEnigmes = [rep1, rep2, rep3];
   }
 
-  poserEnigme() {
+  poserEnigme(personnage) {
     console.log("Vous êtes presqu'a la fin du jeu.");
     console.log(
       "Pour la dernière épreuve du jeu, il vous faut répondre à cette énigme en maximum 3 essaies: "
@@ -47,22 +47,25 @@ class Boss extends Personnage {
     }
 
     if (enigme == rep) {
+      this.pointsDeVie = 0;
+
       console.log(
-        `Félicitation vous venez de remporter cette dernière épreuve! Vous m'avez battu`
+        `Félicitation vous venez de remporter cette dernière épreuve! Vous êtes un winner`
       );
     } else {
+      personnage.pointsDeVie = 0;
       console.log(
         `Game Over, vous n'avez pas su correctement répondre à l'énigme.`
       );
     }
   }
-  attaque() {
+  attaque(personnage) {
     super.attaque();
   }
-  defense() {
+  defense(Personnage) {
     super.defense();
     if (this.pointsDeVie == this.pointsDeVieDeDepart * 0.2) {
-      this.poserEnigme();
+      this.poserEnigme(personnage);
     }
   }
 }
