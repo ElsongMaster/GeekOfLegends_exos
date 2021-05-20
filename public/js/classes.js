@@ -41,7 +41,7 @@ class Boss extends Personnage {
     let enigme = prompt(`${this.tabEnigmes[indice]}:`).toUpperCase();
     let rep = this.repEnigmes[indice].toUpperCase();
     let i = 3;
-    while (i >= 0 || enigme != rep) {
+    while (i >= 0 && enigme != rep) {
       i--;
       enigme = prompt(
         `Mauvaise réponse, il vous reste encore ${i} essaies\n ${this.tabEnigmes[indice]}:`
@@ -63,11 +63,11 @@ class Boss extends Personnage {
   }
   attaque(opposant) {
     super.attaque(opposant);
-    if (this.pointsDeVie == this.pointsDeVieDeDepart * 0.2) {
+    if (this.pointsDeVie <= this.pointsDeVieDeDepart * 0.2) {
       this.poserEnigme(opposant);
     }
   }
-  defense(opposant) {
+  defense() {
     super.defense();
   }
 }
@@ -79,7 +79,7 @@ class Guerrier extends Personnage {
   }
 
   defense() {
-    super.defense(opposant);
+    super.defense();
   }
   attaque(opposant) {
     super.attaque(opposant);
@@ -97,14 +97,13 @@ class Mage extends Personnage {
   defense() {
     super.defense();
   }
-  attaque(tourJeu, opposant) {
+  attaque(opposant) {
     super.attaque(opposant);
-    if (this.pointDeMana - 2 >= 0) {
+    if (this.pointDeMana >= 2) {
       this.pointDeMana -= 2;
       this.tourJeu++;
-    } else if (tourJeu - this.tourJeu == 1) {
+    } else {
       this.pointDeMana += 7;
-      this.tourJeu++;
     }
   }
 }
@@ -112,22 +111,21 @@ class Mage extends Personnage {
 class Archer extends Personnage {
   constructor(nom, pointsDeVie, pointsAttaque) {
     super(nom, pointsDeVie, pointsAttaque);
-    super.tourJeu = 0;
     let tabTmp = [7, 8, 9, 10, 11];
     this.NombreFlêches = tabTmp[Math.floor(Math.random() * tabTmp.length)];
   }
 
   defense() {
+    this.tourJeu++;
     super.defense();
   }
-  attaque(tourJeu, opposant) {
+  attaque(opposant) {
     super.attaque(opposant);
-    if (this.NombreFlêches - 2 >= 0) {
+    if (this.NombreFlêches >= 0) {
       this.NombreFlêches -= 2;
       this.NombreFlêches++;
-    } else if (tourJeu - this.tourJeu == 1) {
+    } else {
       this.NombreFlêches += 6;
-      this.tourJeu++;
     }
   }
 }
