@@ -22,7 +22,7 @@ let saisieNom = () => {
   while (tabNoms.length != 3) {
     tabNoms = prompt(
       "Vous avez mal rentrer les noms reéssayer. Exmpl: LeColosse Arrow MageNoir "
-    );
+    ).split(" ");
   }
 
   return tabNoms;
@@ -34,17 +34,16 @@ let saisiePoint = (totalMax, propriete) => {
   ).split(" ");
   while (!verifNombreUtilisateur(tabPoints, totalMax)) {
     tabPoints = prompt(
-      "Les nombres entrer  ne sont pas bon réessayer. si le motant totale est 300 Exmpl: 100 150 50"
+      "Les nombres entrer  ne sont pas bon réessayer. si le motant totale est 300, cela donne par Exmpl: 100 150 50"
     ).split(" ");
   }
-  for (i in tabPoints) {
+  for (let i in tabPoints) {
     tabPoints[i] = parseInt(tabPoints[i]);
   }
   return tabPoints;
 };
 
 let creationHeros = () => {
-  let tabJoueurs = [];
   let totalPointDeVie = 300;
   let totalpointAttaque = 500;
 
@@ -67,8 +66,57 @@ let creationHeros = () => {
 
   return [heros1, heros2, heros3];
 };
+let verifEntreUtilisateur = (quest, tabRepAttendue) => {
+  let questTmp = prompt(`${quest}`).toUpperCase();
+  while (!tabRepAttendue.includes(questTmp)) {
+    questTmp = prompt(
+      `Ce que vous avez rentrée est incorrect réessayer! ${quest}`
+    ).toUpperCase();
+  }
+  return true;
+};
+let choixPosture = (heros, opposant) => {
+  let quest = `${heros.nom} quelle posture voulez vous adopter pour ce tour? Choisissez entre les options suivantes: 'DEFENSE' , 'ATTAQUE' ou 'NORMAL'`;
+  let verifRetour = verifEntreUtilisateur(quest, [
+    "DEFENSE",
+    "ATTAQUE",
+    "NORMAL",
+  ]);
+  if (verifRetour == "DEFENSE") {
+    console.log("Dans ma condition");
+    heros.defense();
+  } else if (verifRetour == "ATTAQUE") {
+    heros.attaque(opposant);
+  }
+};
 let lancerJeur = () => {
   console.log("Bienvenue dans le jeu GeekOfLegends");
   let bossDuGame = tabBosses[Math.floor(Math.random() * tabBosses.length)];
   let [heros1, heros2, heros3] = creationHeros();
+
+  let tabHeros = [heros1, heros2, heros3];
+
+  console.log("Début du jeu");
+  let tourJeu = 1;
+  while (
+    bossDuGame.pointsDeVie != 0 ||
+    (tabHeros[0].pointsDeVie != 0 &&
+      tabHeros[1].pointsDeVie &&
+      tabHeros[2].pointsDeVie != 0)
+  ) {
+    choixPosture(tabHeros[0], bossDuGame);
+    choixPosture(tabHeros[1], bossDuGame);
+    choixPosture(tabHeros[2], bossDuGame);
+    // choixPosture(
+    //   bossDuGame,
+    //   tabHeros[Math.floor(Math.random() * tabHeros.length)]
+    // );
+    bossDuGame.attaque(tabHeros[Math.floor(Math.random() * tabHeros.length)]);
+
+    tourJeu++;
+  }
 };
+
+//Lancement du jeu
+
+lancerJeur();

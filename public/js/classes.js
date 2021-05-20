@@ -9,9 +9,11 @@ class Personnage {
     this.pointsAttaque *= 0.5;
     this.pointsDeVie *= 2.5;
   }
-  attaque() {
+  attaque(opposant) {
     this.pointsAttaque *= 1.4;
     this.pointsDeVie *= 0.25;
+    console.log(`${opposant.nom} perd ${this.pointsAttaque} de vie`);
+    opposant.pointsDeVie -= this.pointsAttaque;
   }
 }
 
@@ -36,14 +38,14 @@ class Boss extends Personnage {
       "Pour la dernière épreuve du jeu, il vous faut répondre à cette énigme en maximum 3 essaies: "
     );
     let indice = Math.floor(Math.random() * this.tabEnigmes.length);
-    let enigme = prompt(`${this.tabEnigmes[indice]}:`).toLocaleUpperCase();
-    let rep = this.repEnigmes[indice].toLocaleUpperCase();
+    let enigme = prompt(`${this.tabEnigmes[indice]}:`).toUpperCase();
+    let rep = this.repEnigmes[indice].toUpperCase();
     let i = 3;
     while (i >= 0 || enigme != rep) {
       i--;
       enigme = prompt(
         `Mauvaise réponse, il vous reste encore ${i} essaies\n ${this.tabEnigmes[indice]}:`
-      ).toLocaleUpperCase();
+      ).toUpperCase();
     }
 
     if (enigme == rep) {
@@ -59,14 +61,14 @@ class Boss extends Personnage {
       );
     }
   }
-  attaque(personnage) {
-    super.attaque();
-  }
-  defense(Personnage) {
-    super.defense();
+  attaque(opposant) {
+    super.attaque(opposant);
     if (this.pointsDeVie == this.pointsDeVieDeDepart * 0.2) {
-      this.poserEnigme(personnage);
+      this.poserEnigme(opposant);
     }
+  }
+  defense(opposant) {
+    super.defense();
   }
 }
 class Guerrier extends Personnage {
@@ -77,10 +79,10 @@ class Guerrier extends Personnage {
   }
 
   defense() {
-    super.defense();
+    super.defense(opposant);
   }
-  attaque() {
-    super.attaque();
+  attaque(opposant) {
+    super.attaque(opposant);
   }
 }
 
@@ -95,8 +97,8 @@ class Mage extends Personnage {
   defense() {
     super.defense();
   }
-  attaque(tourJeu) {
-    super.attaque();
+  attaque(tourJeu, opposant) {
+    super.attaque(opposant);
     if (this.pointDeMana - 2 >= 0) {
       this.pointDeMana -= 2;
       this.tourJeu++;
@@ -115,11 +117,11 @@ class Archer extends Personnage {
     this.NombreFlêches = tabTmp[Math.floor(Math.random() * tabTmp.length)];
   }
 
-  defense(boss) {
+  defense() {
     super.defense();
   }
-  attaque(tourJeu) {
-    super.attaque();
+  attaque(tourJeu, opposant) {
+    super.attaque(opposant);
     if (this.NombreFlêches - 2 >= 0) {
       this.NombreFlêches -= 2;
       this.NombreFlêches++;
