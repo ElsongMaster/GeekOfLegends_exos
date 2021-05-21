@@ -3,17 +3,32 @@ class Personnage {
     this.nom = nom;
     this.pointsDeVie = pointsDeVie;
     this.pointsAttaque = pointsAttaque;
-    this.tourJeu = 0;
+    this.chanceDetreAttaque = 0;
   }
-  defense() {
+  mortAuCombat() {
+    if (this.pointsDeVie <= 0) {
+      console.log(`${this.nom} est mort au combat`);
+    }
+  }
+  defense(opposant) {
     this.pointsAttaque *= 0.5;
     this.pointsDeVie *= 2.5;
+    console.log(`${opposant.nom} perd ${this.pointsAttaque} de vie`);
+    opposant.pointsDeVie -= this.pointsAttaque;
+    this.mortAuCombat();
   }
   attaque(opposant) {
     this.pointsAttaque *= 1.4;
     this.pointsDeVie *= 0.25;
     console.log(`${opposant.nom} perd ${this.pointsAttaque} de vie`);
     opposant.pointsDeVie -= this.pointsAttaque;
+    this.mortAuCombat();
+  }
+
+  normal(opposant) {
+    console.log(`${opposant.nom} perd ${this.pointsAttaque} de vie`);
+    opposant.pointsDeVie -= this.pointsAttaque;
+    this.mortAuCombat();
   }
 }
 
@@ -55,19 +70,20 @@ class Boss extends Personnage {
         `Félicitation vous venez de remporter cette dernière épreuve! Vous êtes un winner`
       );
     } else {
-      tabJoueurs.forEach((element) => {
-        element.pointsDeVie = 0;
-      });
+      tabJoueurs.splice(0, tabJoueurs.length);
       console.log(
         `Game Over, vous n'avez pas su correctement répondre à l'énigme.`
       );
     }
   }
-  attaque(opposant) {
+  attaqueProBa(opposant) {
     super.attaque(opposant);
   }
-  defense() {
-    super.defense();
+  defense(opposant) {
+    super.defense(opposant);
+  }
+  normal(opposant) {
+    super.normal(opposant);
   }
 }
 class Guerrier extends Personnage {
@@ -77,11 +93,29 @@ class Guerrier extends Personnage {
     this.pointDeRage = 0;
   }
 
-  defense() {
-    super.defense();
+  augmenteRage() {
+    if (this.pointDeRage == 4) {
+      this.pointsAttaque *= 0.25;
+    } else {
+      this.pointDeRage++;
+      if (this.pointsAttaque == 4) {
+        this.pointDeRage = 0;
+        this.pointsAttaque /= 4;
+      }
+    }
+  }
+
+  defense(opposant) {
+    super.defense(opposant);
+    this.augmenteRage();
   }
   attaque(opposant) {
     super.attaque(opposant);
+    this.augmenteRage();
+  }
+  normal(opposant) {
+    super.normal(opposant);
+    this.augmenteRage();
   }
 }
 
@@ -92,8 +126,8 @@ class Mage extends Personnage {
     this.pointDeMana = tabTmp[Math.floor(Math.random() * tabTmp.length)];
   }
 
-  defense() {
-    super.defense();
+  defense(opposant) {
+    super.defense(opposant);
   }
   attaque(opposant) {
     super.attaque(opposant);
@@ -102,6 +136,9 @@ class Mage extends Personnage {
     } else {
       this.pointDeMana += 7;
     }
+  }
+  normal(opposant) {
+    super.normal(opposant);
   }
 }
 
@@ -112,8 +149,9 @@ class Archer extends Personnage {
     this.NombreFlêches = tabTmp[Math.floor(Math.random() * tabTmp.length)];
   }
 
-  defense() {
-    super.defense();
+  defense(opposant) {
+    super.defense(opposant);
+    this.chanceDetreAttaque++;
   }
   attaque(opposant) {
     super.attaque(opposant);
@@ -123,6 +161,10 @@ class Archer extends Personnage {
     } else {
       this.NombreFlêches += 6;
     }
+  }
+
+  normal(opposant) {
+    super.normal(opposant);
   }
 }
 

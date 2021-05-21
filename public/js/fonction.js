@@ -58,17 +58,18 @@ let choixPosture = (heros, opposant) => {
     "NORMAL",
   ]);
   if (verifRetour == "DEFENSE") {
-    // console.log("Dans ma condition");
-    heros.defense();
+    heros.defense(opposant);
   } else if (verifRetour == "ATTAQUE") {
     heros.attaque(opposant);
+  } else {
+    heros.normal(opposant);
   }
 };
 
 let creationBoss = () => {
-  let boss1 = new Boss("Sauron", 2000, 300);
-  let boss2 = new Boss("Chronos", 2000, 300);
-  let boss3 = new Boss("Lilith", 2000, 300);
+  let boss1 = new Boss("Sauron", 10000, 300);
+  let boss2 = new Boss("Chronos", 10000, 300);
+  let boss3 = new Boss("Lilith", 10000, 300);
 
   let tabBosses = [boss1, boss2, boss3];
 
@@ -80,7 +81,6 @@ let creationHeros = () => {
   let totalpointAttaque = 500;
 
   let [nom1, nom2, nom3] = saisieNom();
-  // console.log(nom1, nom2, nom3);
 
   let [pointsDeVie1, pointsDeVie2, pointsDeVie3] = saisiePoint(
     totalPointDeVie,
