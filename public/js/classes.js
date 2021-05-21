@@ -5,30 +5,57 @@ class Personnage {
     this.pointsAttaque = pointsAttaque;
     this.chanceDetreAttaque = 0;
   }
-  mortAuCombat() {
-    if (this.pointsDeVie <= 0) {
-      console.log(`${this.nom} est mort au combat`);
+  mortAuCombat(opposant) {
+    if (opposant.pointsDeVie == 0) {
+      console.log(`${opposant.nom} est mort au combat`);
     }
   }
   defense(opposant) {
     this.pointsAttaque *= 0.5;
     this.pointsDeVie *= 2.5;
-    console.log(`${opposant.nom} perd ${this.pointsAttaque} de vie`);
-    opposant.pointsDeVie -= this.pointsAttaque;
-    this.mortAuCombat();
+    console.log(
+      `${opposant.nom} perd ${
+        this.pointsAttaque > opposant.pointsDeVie
+          ? opposant.pointsDeVie
+          : this.pointsAttaque
+      } de vie`
+    );
+    opposant.pointsDeVie -=
+      this.pointsAttaque > opposant.pointsDeVie
+        ? opposant.pointsDeVie
+        : this.pointsAttaque;
+    this.mortAuCombat(opposant);
   }
   attaque(opposant) {
     this.pointsAttaque *= 1.4;
     this.pointsDeVie *= 0.25;
-    console.log(`${opposant.nom} perd ${this.pointsAttaque} de vie`);
-    opposant.pointsDeVie -= this.pointsAttaque;
-    this.mortAuCombat();
+    console.log(
+      `${opposant.nom} perd ${
+        this.pointsAttaque > opposant.pointsDeVie
+          ? opposant.pointsDeVie
+          : this.pointsAttaque
+      } de vie`
+    );
+    opposant.pointsDeVie -=
+      this.pointsAttaque > opposant.pointsDeVie
+        ? opposant.pointsDeVie
+        : this.pointsAttaque;
+    this.mortAuCombat(opposant);
   }
 
   normal(opposant) {
-    console.log(`${opposant.nom} perd ${this.pointsAttaque} de vie`);
-    opposant.pointsDeVie -= this.pointsAttaque;
-    this.mortAuCombat();
+    console.log(
+      `${opposant.nom} perd ${
+        this.pointsAttaque > opposant.pointsDeVie
+          ? opposant.pointsDeVie
+          : this.pointsAttaque
+      } de vie`
+    );
+    opposant.pointsDeVie -=
+      this.pointsAttaque > opposant.pointsDeVie
+        ? opposant.pointsDeVie
+        : this.pointsAttaque;
+    this.mortAuCombat(opposant);
   }
 }
 

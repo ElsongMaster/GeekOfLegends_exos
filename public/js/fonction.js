@@ -50,20 +50,22 @@ let saisiePoint = (totalMax, propriete) => {
   return tabPoints;
 };
 
-let choixPosture = (heros, opposant) => {
-  let quest = `${heros.nom} quelle posture voulez vous adopter pour ce tour? Choisissez entre les options suivantes: 'DEFENSE' , 'ATTAQUE' ou 'NORMAL'`;
-  let verifRetour = verifEntreUtilisateur(quest, [
-    "DEFENSE",
-    "ATTAQUE",
-    "NORMAL",
-  ]);
-  if (verifRetour == "DEFENSE") {
-    heros.defense(opposant);
-  } else if (verifRetour == "ATTAQUE") {
-    heros.attaque(opposant);
-  } else {
-    heros.normal(opposant);
-  }
+let choixPosture = (tabHeros, opposant) => {
+  tabHeros.forEach((heros) => {
+    let quest = `${heros.nom} quelle posture voulez vous adopter pour ce tour? Choisissez entre les options suivantes: 'DEFENSE' , 'ATTAQUE' ou 'NORMAL'`;
+    let verifRetour = verifEntreUtilisateur(quest, [
+      "DEFENSE",
+      "ATTAQUE",
+      "NORMAL",
+    ]);
+    if (verifRetour == "DEFENSE") {
+      heros.defense(opposant);
+    } else if (verifRetour == "ATTAQUE") {
+      heros.attaque(opposant);
+    } else {
+      heros.normal(opposant);
+    }
+  });
 };
 
 let creationBoss = () => {
@@ -77,8 +79,8 @@ let creationBoss = () => {
 };
 
 let creationHeros = () => {
-  let totalPointDeVie = 300;
-  let totalpointAttaque = 500;
+  let totalPointDeVie = 1500;
+  let totalpointAttaque = 1000;
 
   let [nom1, nom2, nom3] = saisieNom();
 
@@ -100,4 +102,15 @@ let creationHeros = () => {
   return [heros1, heros2, heros3];
 };
 
-export { creationBoss, creationHeros, choixPosture };
+let afficheEtatJeu = (bossDuGame, tabHeros) => {
+  console.log(
+    `Le boss du jeu ${bossDuGame.nom} :  pv = ${bossDuGame.pointsDeVie},  pa = ${bossDuGame.pointsAttaque} . `
+  );
+  tabHeros.forEach((elem) => {
+    console.log(
+      `${elem.nom} :  pv = ${elem.pointsDeVie},  pa = ${elem.pointsAttaque} . `
+    );
+  });
+};
+
+export { creationBoss, creationHeros, choixPosture, afficheEtatJeu };
