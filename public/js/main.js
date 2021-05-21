@@ -7,19 +7,19 @@ let lancerJeu = () => {
   // console.log(tabHeros);
 
   console.log("Début du jeu");
-  let tourJeu = 1;
   while (
-    bossDuGame.pointsDeVie > 0 ||
-    (tabHeros[0].pointsDeVie > 0 &&
-      tabHeros[1].pointsDeVie > 0 &&
-      tabHeros[2].pointsDeVie > 0)
+    bossDuGame.pointsDeVie > 0 &&
+    tabHeros[0].pointsDeVie > 0 &&
+    tabHeros[1].pointsDeVie > 0 &&
+    tabHeros[2].pointsDeVie > 0
   ) {
     choixPosture(tabHeros[0], bossDuGame);
     choixPosture(tabHeros[1], bossDuGame);
     choixPosture(tabHeros[2], bossDuGame);
     bossDuGame.attaque(tabHeros[Math.floor(Math.random() * tabHeros.length)]);
-
-    tourJeu++;
+    if (bossDuGame.pointsDeVie <= bossDuGame.pointsDeVieDeDepart * 0.2) {
+      bossDuGame.poserEnigme(tabHeros);
+    }
   }
 };
 

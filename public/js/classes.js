@@ -24,7 +24,7 @@ class Boss extends Personnage {
       "Je suis d'eau,je suis d'air,et je suis d'électricité. Qui suis-je ?";
     let rep1 = "le courant";
     let enigme2 = "Quel est l'indice du premier 'i' de cette question";
-    let rep2 = enigme1.split("").find((elem) => elem == "i");
+    let rep2 = enigme2.split("").find((elem) => elem == "i");
     let enigme3 = "Que retourne Math.floor(1.3 *10)";
     let rep3 = "13";
     this.pointsDeVieDeDepart = pointsDeVie;
@@ -32,7 +32,7 @@ class Boss extends Personnage {
     this.repEnigmes = [rep1, rep2, rep3];
   }
 
-  poserEnigme(personnage) {
+  poserEnigme(tabJoueurs) {
     console.log("Vous êtes presqu'a la fin du jeu.");
     console.log(
       "Pour la dernière épreuve du jeu, il vous faut répondre à cette énigme en maximum 3 essaies: "
@@ -41,7 +41,7 @@ class Boss extends Personnage {
     let enigme = prompt(`${this.tabEnigmes[indice]}:`).toUpperCase();
     let rep = this.repEnigmes[indice].toUpperCase();
     let i = 3;
-    while (i >= 0 && enigme != rep) {
+    while (i > 0 && enigme != rep) {
       i--;
       enigme = prompt(
         `Mauvaise réponse, il vous reste encore ${i} essaies\n ${this.tabEnigmes[indice]}:`
@@ -55,7 +55,9 @@ class Boss extends Personnage {
         `Félicitation vous venez de remporter cette dernière épreuve! Vous êtes un winner`
       );
     } else {
-      personnage.pointsDeVie = 0;
+      tabJoueurs.forEach((element) => {
+        element.pointsDeVie = 0;
+      });
       console.log(
         `Game Over, vous n'avez pas su correctement répondre à l'énigme.`
       );
@@ -63,9 +65,6 @@ class Boss extends Personnage {
   }
   attaque(opposant) {
     super.attaque(opposant);
-    if (this.pointsDeVie <= this.pointsDeVieDeDepart * 0.2) {
-      this.poserEnigme(opposant);
-    }
   }
   defense() {
     super.defense();
@@ -89,7 +88,6 @@ class Guerrier extends Personnage {
 class Mage extends Personnage {
   constructor(nom, pointsDeVie, pointsAttaque) {
     super(nom, pointsDeVie, pointsAttaque);
-    super.tourJeu = 0;
     let tabTmp = [7, 9, 11];
     this.pointDeMana = tabTmp[Math.floor(Math.random() * tabTmp.length)];
   }
@@ -101,7 +99,6 @@ class Mage extends Personnage {
     super.attaque(opposant);
     if (this.pointDeMana >= 2) {
       this.pointDeMana -= 2;
-      this.tourJeu++;
     } else {
       this.pointDeMana += 7;
     }
@@ -116,12 +113,11 @@ class Archer extends Personnage {
   }
 
   defense() {
-    this.tourJeu++;
     super.defense();
   }
   attaque(opposant) {
     super.attaque(opposant);
-    if (this.NombreFlêches >= 0) {
+    if (this.NombreFlêches >= 2) {
       this.NombreFlêches -= 2;
       this.NombreFlêches++;
     } else {
